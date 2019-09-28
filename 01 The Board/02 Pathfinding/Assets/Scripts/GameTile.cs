@@ -10,6 +10,10 @@ public class GameTile : MonoBehaviour {
     int distance;
 
     public bool HasPath => distance != int.MaxValue;
+    public GameTile GrowPathNorth() => GrowPathTo(north);
+    public GameTile GrowPathEast() => GrowPathTo(east);
+    public GameTile GrowPathSouth() => GrowPathTo(south);
+    public GameTile GrowPathWest() => GrowPathTo(west);
 
     public static void MakeEastWestNeighbors(GameTile east, GameTile west) {
         Debug.Assert(west.east == null && east.west == null, "Redefined Neighbors!");
@@ -31,6 +35,14 @@ public class GameTile : MonoBehaviour {
     public void BecomeDestination() {
         distance = 0;
         nextOnPath = null;
+    }
+
+    GameTile GrowPathTo(GameTile neighbor) {
+        Debug.Assert(HasPath, "No path!");
+        if (neighbor == null || neighbor.HasPath) return null;
+        neighbor.distance = distance + 1;
+        neighbor.nextOnPath = this;
+        return neighbor;
     }
 
 

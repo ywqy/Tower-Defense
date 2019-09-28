@@ -37,16 +37,17 @@ public class GameBoard : MonoBehaviour {
                 }
             }
         }
+        FindPaths();
     }
 
     void FindPaths() {
         foreach (GameTile tile in tiles) {
             tile.ClearPath();
         }
-        tiles[0].BecomeDestination();
-        searchFrontier.Enqueue(tiles[0]);
+        tiles[size.x*size.y/2].BecomeDestination();
+        searchFrontier.Enqueue(tiles[size.x * size.y / 2]);
 
-        if (searchFrontier.Count > 0) {
+        while (searchFrontier.Count > 0) {
             GameTile tile = searchFrontier.Dequeue();
             if (tile != null) {
                 searchFrontier.Enqueue(tile.GrowPathNorth());
@@ -54,6 +55,10 @@ public class GameBoard : MonoBehaviour {
                 searchFrontier.Enqueue(tile.GrowPathSouth());
                 searchFrontier.Enqueue(tile.GrowPathWest());
             }
+        }
+
+        foreach (GameTile tile in tiles) {
+            tile.ShowPath();
         }
     }
 }

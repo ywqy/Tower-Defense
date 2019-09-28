@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameTile : MonoBehaviour {
+    static Quaternion
+        northRotation = Quaternion.Euler(90f, 0f, 0f),
+        eastRotation = Quaternion.Euler(90f, 90f, 0f),
+        southRotation = Quaternion.Euler(90f, 180f, 0f),
+        westRotation = Quaternion.Euler(90f, 270f, 0f);
+
     [SerializeField]
     Transform arrow = default;
 
@@ -23,8 +29,9 @@ public class GameTile : MonoBehaviour {
 
     public static void MakeNorthSouthNeighbors(GameTile north, GameTile south) {
         Debug.Assert(north.south == null && south.north == null, "Redefined Neighbors!");
-        north.south = south;
         south.north = north;
+        north.south = south;
+
     }
 
     public void ClearPath() {
@@ -37,13 +44,28 @@ public class GameTile : MonoBehaviour {
         nextOnPath = null;
     }
 
+    public void ShowPath() {
+        if (distance == 0) {
+            arrow.gameObject.SetActive(false);
+            return;
+        }
+        arrow.gameObject.SetActive(true);
+        arrow.localRotation =
+            nextOnPath == north ? northRotation :
+            nextOnPath == east ? eastRotation :
+            nextOnPath == south ? southRotation :
+            westRotation;
+    }
+
     GameTile GrowPathTo(GameTile neighbor) {
         Debug.Assert(HasPath, "No path!");
-        if (neighbor == null || neighbor.HasPath) return null;
+        if (!HasPath || neighbor == null || neighbor.HasPath) { return null; }
         neighbor.distance = distance + 1;
         neighbor.nextOnPath = this;
         return neighbor;
     }
+
+
 
 
 }

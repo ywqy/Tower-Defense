@@ -16,6 +16,7 @@ public class GameTile : MonoBehaviour {
     int distance;
 
     public bool HasPath => distance != int.MaxValue;
+    public bool IsAlternative { get; set; }
     public GameTile GrowPathNorth() => GrowPathTo(north);
     public GameTile GrowPathEast() => GrowPathTo(east);
     public GameTile GrowPathSouth() => GrowPathTo(south);

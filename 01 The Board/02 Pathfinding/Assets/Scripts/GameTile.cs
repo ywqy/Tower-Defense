@@ -6,7 +6,10 @@ public class GameTile : MonoBehaviour {
     [SerializeField]
     Transform arrow = default;
 
-    GameTile north, east, south, west;
+    GameTile north, east, south, west, nextOnPath;
+    int distance;
+
+    public bool HasPath => distance != int.MaxValue;
 
     public static void MakeEastWestNeighbors(GameTile east, GameTile west) {
         Debug.Assert(west.east == null && east.west == null, "Redefined Neighbors!");
@@ -19,4 +22,16 @@ public class GameTile : MonoBehaviour {
         north.south = south;
         south.north = north;
     }
+
+    public void ClearPath() {
+        distance = int.MaxValue;
+        nextOnPath = null;
+    }
+
+    public void BecomeDestination() {
+        distance = 0;
+        nextOnPath = null;
+    }
+
+
 }

@@ -7,6 +7,8 @@ public class Game : MonoBehaviour {
     Vector2Int boardSize = new Vector2Int(11, 11);
     [SerializeField]
     GameBoard board = default;
+    [SerializeField]
+    GameTileContentFactory tileContentFactory = default;
 
     void Awake() {
         board.Initialize(boardSize);

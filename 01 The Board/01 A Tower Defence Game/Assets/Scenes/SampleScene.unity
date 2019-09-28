@@ -462,6 +462,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ground: {fileID: 14067441}
+  tilePrefab: {fileID: 6064804108390547557, guid: 7f4362b14d5b6944897a9da2600d9bfa,
+    type: 3}
 --- !u!4 &1507268816
 Transform:
   m_ObjectHideFlags: 0

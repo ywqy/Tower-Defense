@@ -7,12 +7,14 @@ public class GameBoard : MonoBehaviour {
     Transform ground = default;
     [SerializeField]
     GameTile tilePrefab = default;
+    [SerializeField]
+    Texture2D gridTexture = default;
 
     Vector2Int size;
     GameTile[] tiles;
     Queue<GameTile> searchFrontier = new Queue<GameTile>();
     GameTileContentFactory contentFactory;
-    bool showPaths;
+    bool showGrid, showPaths;
 
     public bool ShowPaths {
         get => showPaths;
@@ -26,6 +28,20 @@ public class GameBoard : MonoBehaviour {
                 foreach (GameTile tile in tiles) {
                     tile.HidePath();
                 }
+            }
+        }
+    }
+
+    public bool ShowGrid {
+        get => showGrid;
+        set {
+            showGrid = value;
+            Material m = ground.GetComponent<MeshRenderer>().material;
+            if (showGrid) {
+                m.mainTexture = gridTexture;
+                m.SetTextureScale("_MainTex", size);
+            } else {
+                m.mainTexture = null;
             }
         }
     }

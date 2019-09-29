@@ -10,6 +10,8 @@ public class GameTileContentFactory : ScriptableObject
     GameTileContent emptyPrefab = default;
     [SerializeField]
     GameTileContent destinationPrefab = default;
+    [SerializeField]
+    GameTileContent wallPrefab = default;
     
 
     Scene contentScene;
@@ -18,6 +20,7 @@ public class GameTileContentFactory : ScriptableObject
         switch (type) {
             case GameTileContentType.Empty: return Get(emptyPrefab);
             case GameTileContentType.Destination: return Get(destinationPrefab);
+            case GameTileContentType.Wall: return Get(wallPrefab);
         }
         Debug.Assert(false, "Unspported type: " + type);
         return null;

@@ -19,6 +19,8 @@ public class Game : MonoBehaviour {
     void Update() {
         if (Input.GetMouseButtonDown(0)) {
             HandleTouch();
+        }else if (Input.GetMouseButtonDown(1)) {
+            HandleAlternativeTouch();
         }
     }
 
@@ -26,6 +28,13 @@ public class Game : MonoBehaviour {
         GameTile tile = board.GetTile(TouchRay);
         if (tile != null) {
             board.ToggleDestination(tile);
+        }
+    }
+
+    void HandleAlternativeTouch() {
+        GameTile tile = board.GetTile(TouchRay);
+        if (tile != null) {
+            board.ToggleWall(tile);
         }
     }
 

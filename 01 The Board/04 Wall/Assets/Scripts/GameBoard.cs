@@ -47,7 +47,7 @@ public class GameBoard : MonoBehaviour {
     }
 
     public GameTile GetTile(Ray ray) {
-        if (Physics.Raycast(ray,out RaycastHit hit)) {
+        if (Physics.Raycast(ray, out RaycastHit hit)) {
             int x = (int)(hit.point.x + size.x * .5f);
             int y = (int)(hit.point.z + size.y * .5f);
             if (x >= 0 && x < size.x && y >= 0 && y < size.y) {
@@ -59,13 +59,26 @@ public class GameBoard : MonoBehaviour {
     }
 
     public void ToggleDestination(GameTile tile) {
-        if(tile.Content.Type == GameTileContentType.Destination) {
+        if (tile.Content.Type == GameTileContentType.Destination) {
             tile.Content = contentFactory.Get(GameTileContentType.Empty);
             FindPaths();
-        } else {
+        } else if (tile.Content.Type == GameTileContentType.Empty) {
             tile.Content = contentFactory.Get(GameTileContentType.Destination);
             if (!FindPaths()) {
                 tile.Content = contentFactory.Get(GameTileContentType.Destination);
+                FindPaths();
+            }
+        }
+    }
+
+    public void ToggleWall(GameTile tile) {
+        if (tile.Content.Type == GameTileContentType.Wall) {
+            tile.Content = contentFactory.Get(GameTileContentType.Empty);
+            FindPaths();
+        } else if (tile.Content.Type == GameTileContentType.Empty) {
+            tile.Content = contentFactory.Get(GameTileContentType.Wall);
+            if (!FindPaths()) {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
                 FindPaths();
             }
         }
@@ -80,7 +93,7 @@ public class GameBoard : MonoBehaviour {
                 tile.ClearPath();
             }
         }
-        if(searchFrontier.Count == 0) {
+        if (searchFrontier.Count == 0) {
             return false;
         }
 
@@ -108,5 +121,5 @@ public class GameBoard : MonoBehaviour {
         return true;
     }
 
-    
+
 }

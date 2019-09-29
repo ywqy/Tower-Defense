@@ -42,7 +42,11 @@ public class Game : MonoBehaviour {
     void HandleAlternativeTouch() {
         GameTile tile = board.GetTile(TouchRay);
         if (tile != null) {
-            board.ToggleWall(tile);
+            if (Input.GetKey(KeyCode.LeftShift)) {
+                board.ToggleSpawnPoint(tile);
+            } else {
+                board.ToggleWall(tile);
+            }
         }
     }
 

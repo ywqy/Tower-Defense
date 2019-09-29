@@ -22,6 +22,10 @@ public class Game : MonoBehaviour {
         }else if (Input.GetMouseButtonDown(1)) {
             HandleAlternativeTouch();
         }
+
+        if (Input.GetKeyDown(KeyCode.V)) {
+            board.ShowPaths = !board.ShowPaths;
+        }
     }
 
     void HandleTouch() {

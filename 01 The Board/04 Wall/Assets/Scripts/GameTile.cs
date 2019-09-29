@@ -71,12 +71,16 @@ public class GameTile : MonoBehaviour {
             westRotation;
     }
 
+    public void HidePath() {
+        arrow.gameObject.SetActive(false);
+    }
+
     GameTile GrowPathTo(GameTile neighbor) {
         Debug.Assert(HasPath, "No path!");
         if (!HasPath || neighbor == null || neighbor.HasPath) { return null; }
         neighbor.distance = distance + 1;
         neighbor.nextOnPath = this;
-        return neighbor;
+        return neighbor.content.Type != GameTileContentType.Wall ? neighbor : null;
     }
 
 

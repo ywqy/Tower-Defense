@@ -12,6 +12,23 @@ public class GameBoard : MonoBehaviour {
     GameTile[] tiles;
     Queue<GameTile> searchFrontier = new Queue<GameTile>();
     GameTileContentFactory contentFactory;
+    bool showPaths;
+
+    public bool ShowPaths {
+        get => showPaths;
+        set {
+            showPaths = value;
+            if (showPaths) {
+                foreach (GameTile tile in tiles) {
+                    tile.ShowPath();
+                }
+            } else {
+                foreach (GameTile tile in tiles) {
+                    tile.HidePath();
+                }
+            }
+        }
+    }
 
     public void Initialize(Vector2Int size, GameTileContentFactory contentFactory) {
         this.size = size;
@@ -114,10 +131,17 @@ public class GameBoard : MonoBehaviour {
             }
         }
 
-        foreach (GameTile tile in tiles) {
-            tile.ShowPath();
+        foreach(GameTile tile in tiles) {
+            if (!tile.HasPath) {
+                return false;
+            }
         }
 
+        if (showPaths) {
+            foreach (GameTile tile in tiles) {
+                tile.ShowPath();
+            }
+        }
         return true;
     }
 

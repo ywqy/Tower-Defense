@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [CreateAssetMenu]
-public class GameTileContentFactory : ScriptableObject
-{
+public class GameTileContentFactory : ScriptableObject {
     [SerializeField]
     GameTileContent emptyPrefab = default;
     [SerializeField]
     GameTileContent destinationPrefab = default;
     [SerializeField]
     GameTileContent wallPrefab = default;
-    
+    [SerializeField]
+    GameTileContent spawnPointPrefab = default;
+
 
     Scene contentScene;
 
@@ -21,11 +22,12 @@ public class GameTileContentFactory : ScriptableObject
             case GameTileContentType.Empty: return Get(emptyPrefab);
             case GameTileContentType.Destination: return Get(destinationPrefab);
             case GameTileContentType.Wall: return Get(wallPrefab);
+            case GameTileContentType.SpawnPoint: return Get(spawnPointPrefab);
         }
         Debug.Assert(false, "Unspported type: " + type);
         return null;
     }
-    
+
 
     public void Reclaim(GameTileContent content) {
         Debug.Assert(content.OriginFactory == this, "Wrong factory reclaimed!");

@@ -11,10 +11,11 @@ public class GameBoard : MonoBehaviour {
     Vector2Int size;
     GameTile[] tiles;
     Queue<GameTile> searchFrontier = new Queue<GameTile>();
+    GameTileContentFactory contentFactory;
 
-
-    public void Initialize(Vector2Int size) {
+    public void Initialize(Vector2Int size, GameTileContentFactory contentFactory) {
         this.size = size;
+        this.contentFactory = contentFactory;
         ground.localScale = new Vector3(size.x, size.y, 1f);
 
         Vector2 offset = new Vector2(
@@ -39,9 +40,10 @@ public class GameBoard : MonoBehaviour {
                 if ((y & 1) == 0) {
                     tile.IsAlternative = !tile.IsAlternative;
                 }
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
             }
         }
-        FindPaths();
+        ToggleDestination(tiles[tiles.Length / 2]);
     }
 
     public GameTile GetTile(Ray ray) {
@@ -56,12 +58,31 @@ public class GameBoard : MonoBehaviour {
         return null;
     }
 
-    void FindPaths() {
-        foreach (GameTile tile in tiles) {
-            tile.ClearPath();
+    public void ToggleDestination(GameTile tile) {
+        if(tile.Content.Type == GameTileContentType.Destination) {
+            tile.Content = contentFactory.Get(GameTileContentType.Empty);
+            FindPaths();
+        } else {
+            tile.Content = contentFactory.Get(GameTileContentType.Destination);
+            if (!FindPaths()) {
+                tile.Content = contentFactory.Get(GameTileContentType.Destination);
+                FindPaths();
+            }
         }
-        tiles[tiles.Length / 2].BecomeDestination();
-        searchFrontier.Enqueue(tiles[tiles.Length / 2]);
+    }
+
+    bool FindPaths() {
+        foreach (GameTile tile in tiles) {
+            if (tile.Content.Type == GameTileContentType.Destination) {
+                tile.BecomeDestination();
+                searchFrontier.Enqueue(tile);
+            } else {
+                tile.ClearPath();
+            }
+        }
+        if(searchFrontier.Count == 0) {
+            return false;
+        }
 
         while (searchFrontier.Count > 0) {
             GameTile tile = searchFrontier.Dequeue();
@@ -83,5 +104,9 @@ public class GameBoard : MonoBehaviour {
         foreach (GameTile tile in tiles) {
             tile.ShowPath();
         }
+
+        return true;
     }
+
+    
 }

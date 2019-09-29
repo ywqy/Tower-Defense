@@ -47,6 +47,8 @@ public class GameBoard : MonoBehaviour {
         }
     }
 
+    public int SpwanPointCount => spawnPoints.Count;
+
     public void Initialize(Vector2Int size, GameTileContentFactory contentFactory) {
         this.size = size;
         this.contentFactory = contentFactory;
@@ -91,6 +93,10 @@ public class GameBoard : MonoBehaviour {
             return null;
         }
         return null;
+    }
+
+    public GameTile GetSpawnPoint(int index) {
+        return spawnPoints[index];
     }
 
     public void ToggleDestination(GameTile tile) {

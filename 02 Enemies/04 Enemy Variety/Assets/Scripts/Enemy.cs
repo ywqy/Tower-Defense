@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour {
     DirectionChange directionChange;
     float directionAngleFrom, directionAngleTo;
     float pathOffset;
-
+    float speed;
 
     public EnemyFactory OriginFactory {
         get => originFactory;
@@ -22,8 +22,9 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    public void Initialize(float scale, float pathOffset) {
+    public void Initialize(float scale,float speed, float pathOffset) {
         model.localScale = new Vector3(scale, scale, scale);
+        this.speed = speed;
         this.pathOffset = pathOffset;
     }
 
@@ -85,28 +86,28 @@ public class Enemy : MonoBehaviour {
         transform.localRotation = direction.GetRotation();
         directionAngleTo = direction.GetAngle();
         model.localPosition = new Vector3(pathOffset, 0f);
-        progressFactor = 1f;
+        progressFactor = speed;
     }
 
     void PrepareTurnRight() {
         directionAngleTo = directionAngleFrom + 90f;
         model.localPosition = new Vector3(pathOffset - 0.5f, 0f);
         transform.localPosition = positionFrom + direction.GetHalfVector();
-        progressFactor = 1f / (Mathf.PI * 0.5f * (0.5f - pathOffset));
+        progressFactor = speed / (Mathf.PI * 0.5f * (0.5f - pathOffset));
     }
 
     void PrepareTurnLeft() {
         directionAngleTo = directionAngleFrom - 90f;
         model.localPosition = new Vector3(pathOffset + 0.5f, 0f);
         transform.localPosition = positionFrom + direction.GetHalfVector();
-        progressFactor = 1f / (Mathf.PI * 0.5f * (0.5f + pathOffset));
+        progressFactor = speed / (Mathf.PI * 0.5f * (0.5f + pathOffset));
     }
 
     void PrepareTurnAround() {
         directionAngleTo = directionAngleFrom + (pathOffset<0f?180f:-180f);
         model.localPosition = new Vector3(pathOffset, 0f);
         transform.localPosition = positionFrom;
-        progressFactor = 1f / (Mathf.PI * Mathf.Max(Mathf.Abs(pathOffset), .2f));
+        progressFactor = speed / (Mathf.PI * Mathf.Max(Mathf.Abs(pathOffset), .2f));
     }
 
     void PrepareIntro() {
@@ -117,7 +118,7 @@ public class Enemy : MonoBehaviour {
         directionAngleFrom = directionAngleTo = direction.GetAngle();
         model.localPosition = new Vector3(pathOffset, 0f);
         transform.localRotation = direction.GetRotation();
-        progressFactor = 2f;
+        progressFactor = 2f * speed;
     }
 
     void PrepareOutro() {
@@ -126,7 +127,7 @@ public class Enemy : MonoBehaviour {
         directionAngleTo = direction.GetAngle();
         model.localPosition = new Vector3(pathOffset, 0f);
         transform.localRotation = direction.GetRotation();
-        progressFactor = 2f;
+        progressFactor = 2f * speed;
     }
 
 }

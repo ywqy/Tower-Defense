@@ -21,6 +21,10 @@ public class Enemy : MonoBehaviour {
         }
     }
 
+    public void Initialize(float scale) {
+        model.localScale = new Vector3(scale, scale, scale);
+    }
+
     public void SpawnOn(GameTile tile) {
         Debug.Assert(tile.NextTileOnPath != null, "Nowhere to go!", this);
         tileFrom = tile;

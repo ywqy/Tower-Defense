@@ -9,24 +9,21 @@ public class Tower : GameTileContent {
 
     [SerializeField, Range(1.5f, 10.5f)]
     float targetingRange = 1.5f;
+    [SerializeField]
+    Transform turrent = default;
 
     TargetPoint target;
 
 
     public override void GameUpdate() {
         if (TrackTarget() || AcquireTarget()) {
-            Debug.Log("Locked on Target");
+            Shoot();
         }
     }
 
-    void OnDrawGizmosSelected() {
-        Gizmos.color = Color.yellow;
-        Vector3 position = transform.localPosition;
-        position.y += 0.01f;
-        Gizmos.DrawWireSphere(position, targetingRange);
-        if (target != null) {
-            Gizmos.DrawLine(position, target.Position);
-        }
+    void Shoot() {
+        Vector3 point = target.Position;
+        turrent.LookAt(point);
     }
 
     bool AcquireTarget() {
@@ -61,5 +58,15 @@ public class Tower : GameTileContent {
             return false;
         }
         return true;
+    }
+
+    void OnDrawGizmosSelected() {
+        Gizmos.color = Color.yellow;
+        Vector3 position = transform.localPosition;
+        position.y += 0.01f;
+        Gizmos.DrawWireSphere(position, targetingRange);
+        if (target != null) {
+            Gizmos.DrawLine(position, target.Position);
+        }
     }
 }

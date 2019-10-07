@@ -10,20 +10,32 @@ public class Tower : GameTileContent {
     [SerializeField, Range(1.5f, 10.5f)]
     float targetingRange = 1.5f;
     [SerializeField]
-    Transform turrent = default;
+    Transform turrent = default, laserBeam = default;
 
     TargetPoint target;
-
+    Vector3 laserBeamScale;
 
     public override void GameUpdate() {
         if (TrackTarget() || AcquireTarget()) {
             Shoot();
+        } else {
+            laserBeam.localScale = Vector3.zero;
         }
+    }
+
+    void Awake() {
+        laserBeamScale = laserBeam.localScale;
     }
 
     void Shoot() {
         Vector3 point = target.Position;
         turrent.LookAt(point);
+        laserBeam.localRotation = turrent.localRotation;
+
+        float d = Vector3.Distance(turrent.position, point);
+        laserBeamScale.z = d;
+        laserBeam.localScale = laserBeamScale;
+        laserBeam.localPosition = turrent.localPosition + 0.5f * d * laserBeam.forward;
     }
 
     bool AcquireTarget() {

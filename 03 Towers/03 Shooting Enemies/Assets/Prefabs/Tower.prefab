@@ -390,3 +390,4 @@ MonoBehaviour:
   type: 4
   targetingRange: 3.5
   turrent: {fileID: 5324055752725426170}
+  laserBeam: {fileID: 4775847252544803640}

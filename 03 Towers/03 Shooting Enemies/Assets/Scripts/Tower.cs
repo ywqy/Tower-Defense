@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class Tower : GameTileContent {
     const int enemyLayerMask = 1 << 9;
-    static Collider[] targetsBuffer = new Collider[1];
+    static Collider[] targetsBuffer = new Collider[100];
 
     [SerializeField, Range(1.5f, 10.5f)]
     float targetingRange = 1.5f;
     [SerializeField]
     Transform turrent = default, laserBeam = default;
+    [SerializeField, Range(1f, 100f)]
+    float damagePerSecond = 10f;
 
     TargetPoint target;
     Vector3 laserBeamScale;
@@ -36,6 +38,8 @@ public class Tower : GameTileContent {
         laserBeamScale.z = d;
         laserBeam.localScale = laserBeamScale;
         laserBeam.localPosition = turrent.localPosition + 0.5f * d * laserBeam.forward;
+
+        target.Enemy.ApplyDamage(damagePerSecond * Time.deltaTime);
     }
 
     bool AcquireTarget() {
@@ -47,7 +51,7 @@ public class Tower : GameTileContent {
             a, b, targetingRange, targetsBuffer, enemyLayerMask
         );
         if (hits > 0) {
-            target = targetsBuffer[0].GetComponent<TargetPoint>();
+            target = targetsBuffer[Random.Range(0, hits)].GetComponent<TargetPoint>();
             Debug.Assert(target != null, "Targeted non-enemy!", targetsBuffer[0]);
             return true;
         }

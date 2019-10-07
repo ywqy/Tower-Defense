@@ -13,5 +13,6 @@ public class TargetPoint : MonoBehaviour {
             GetComponent<SphereCollider>() != null, 
             "Target point without sphere collider!", this
         );
+        Debug.Assert(gameObject.layer == 9, "Target point on wrong Layer!", this);
     }
 }

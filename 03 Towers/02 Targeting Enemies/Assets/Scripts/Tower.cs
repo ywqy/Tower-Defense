@@ -22,6 +22,9 @@ public class Tower : GameTileContent {
         Vector3 position = transform.localPosition;
         position.y += 0.01f;
         Gizmos.DrawWireSphere(position, targetingRange);
+        if (target != null) {
+            Gizmos.DrawLine(position, target.Position);
+        }
     }
 
     bool AcquireTarget() {

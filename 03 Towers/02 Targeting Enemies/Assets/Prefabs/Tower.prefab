@@ -388,3 +388,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
+  targetingRange: 3.5

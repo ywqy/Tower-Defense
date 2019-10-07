@@ -14,6 +14,9 @@ public class Enemy : MonoBehaviour {
     float pathOffset;
     float speed;
 
+
+    public float Scale { get; private set; }
+
     public EnemyFactory OriginFactory {
         get => originFactory;
         set {
@@ -23,6 +26,7 @@ public class Enemy : MonoBehaviour {
     }
 
     public void Initialize(float scale,float speed, float pathOffset) {
+        Scale = scale;
         model.localScale = new Vector3(scale, scale, scale);
         this.speed = speed;
         this.pathOffset = pathOffset;

@@ -7,7 +7,7 @@ public class TargetPoint : MonoBehaviour {
     public Vector3 Position => transform.position;
 
     void Awake() {
-        Enemy.transform.root.GetComponent<Enemy>();
+        Enemy = transform.root.GetComponent<Enemy>();
         Debug.Assert(Enemy != null, "Target point without Enemy root!", this);
         Debug.Assert(
             GetComponent<SphereCollider>() != null, 

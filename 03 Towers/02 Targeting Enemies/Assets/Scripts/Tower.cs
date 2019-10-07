@@ -28,8 +28,13 @@ public class Tower : GameTileContent {
     }
 
     bool AcquireTarget() {
-        Collider[] targets = Physics.OverlapSphere(
-            transform.localPosition, targetingRange, enemyLayerMask
+        Vector3 a = transform.localPosition;
+        Vector3 b = a;
+        b.y += 3f;
+
+
+        Collider[] targets = Physics.OverlapCapsule(
+            a, b, targetingRange, enemyLayerMask
         );
         if (targets.Length > 0) {
             target = targets[0].GetComponent<TargetPoint>();
@@ -46,7 +51,11 @@ public class Tower : GameTileContent {
         }
         Vector3 a = transform.localPosition;
         Vector3 b = target.Position;
-        if (Vector3.Distance(a, b) > targetingRange + 0.125f * target.Enemy.Scale) {
+        float x = a.x - b.x;
+        float z = a.z - b.z;
+        float r = targetingRange + 0.125f * target.Enemy.Scale;
+
+        if (x * x + z * z > r * r) {
             target = null;
             return false;
         }

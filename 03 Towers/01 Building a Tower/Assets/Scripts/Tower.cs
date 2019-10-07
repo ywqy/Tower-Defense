@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameTileContentType {
-    Empty, Destination, Wall, SpawnPoint, Tower
+public class Tower : GameTileContent
+{
+    
 }

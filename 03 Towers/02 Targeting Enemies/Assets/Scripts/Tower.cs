@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class Tower : GameTileContent {
     const int enemyLayerMask = 1 << 9;
+    static Collider[] targetsBuffer = new Collider[1];
 
     [SerializeField, Range(1.5f, 10.5f)]
     float targetingRange = 1.5f;
 
     TargetPoint target;
+
 
     public override void GameUpdate() {
         if (TrackTarget() || AcquireTarget()) {
@@ -32,13 +34,12 @@ public class Tower : GameTileContent {
         Vector3 b = a;
         b.y += 3f;
 
-
-        Collider[] targets = Physics.OverlapCapsule(
-            a, b, targetingRange, enemyLayerMask
+        int hits = Physics.OverlapCapsuleNonAlloc(
+            a, b, targetingRange, targetsBuffer, enemyLayerMask
         );
-        if (targets.Length > 0) {
-            target = targets[0].GetComponent<TargetPoint>();
-            Debug.Assert(target != null, "Targeted non-enemy!", targets[0]);
+        if (hits > 0) {
+            target = targetsBuffer[0].GetComponent<TargetPoint>();
+            Debug.Assert(target != null, "Targeted non-enemy!", targetsBuffer[0]);
             return true;
         }
         target = null;

@@ -263,4 +263,4 @@ MonoBehaviour:
   type: 0
   targetingRange: 1.5
   shotsPreSecond: 1
-  mortar: {fileID: 0}
+  mortar: {fileID: 5324055752725426170}

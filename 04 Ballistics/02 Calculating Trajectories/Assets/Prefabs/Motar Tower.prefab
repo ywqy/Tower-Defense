@@ -261,6 +261,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  targetingRange: 1.5
+  targetingRange: 3.5
   shotsPreSecond: 1
   mortar: {fileID: 5324055752725426170}

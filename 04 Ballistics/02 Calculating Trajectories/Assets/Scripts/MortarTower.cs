@@ -11,6 +11,12 @@ public class MortarTower : Tower {
 
     public override TowerType TowerType => TowerType.Mortar;
 
+    float launchSpeed;
+
+    void Awake() {
+        OnValidate();
+    }
+
     public override void GameUpdate() {
         Launch(new Vector3(3f, 0f, 0f));
         Launch(new Vector3(0f, 0f, 1f));
@@ -31,6 +37,26 @@ public class MortarTower : Tower {
         float y = -launchPoint.y;
         dir /= x;
 
+        float g = 9.81f;
+        float s = launchSpeed;
+        float s2 = s * s;
+
+        float r = s2 * s2 - g * (g * x * x + 2f * y * s2);
+        Debug.Assert(r >= 0f, "Launch velocity insufficient for range!");
+        float tanTheta = (s2 + Mathf.Sqrt(r)) / (g * x);
+        float cosTheta = Mathf.Cos(Mathf.Atan(tanTheta));
+        float sinTheta = cosTheta * tanTheta;
+
+        Vector3 prev = launchPoint, next;
+        for (int i = 1; i <= 10; i++) {
+            float t = i / 10f;
+            float dx = s * cosTheta * t;
+            float dy = s * sinTheta * t - 0.5f * g * t * t;
+            next = launchPoint + new Vector3(dir.x * dx, dy, dir.y * dx);
+            Debug.DrawLine(prev, next, Color.blue);
+            prev = next;
+        }
+
         Debug.DrawLine(launchPoint, targetPoint, Color.yellow);
         Debug.DrawLine(
             new Vector3(launchPoint.x, 0.01f, launchPoint.z),
@@ -38,5 +64,12 @@ public class MortarTower : Tower {
             Color.white
         );
 
+        
+    }
+
+    void OnValidate() {
+        float x = targetingRange + 0.25001f;
+        float y = -mortar.position.y;
+        launchSpeed = Mathf.Sqrt(9.81f * (y + Mathf.Sqrt(x * x + y * y)));
     }
 }

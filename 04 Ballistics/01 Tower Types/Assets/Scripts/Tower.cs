@@ -5,11 +5,13 @@ using UnityEngine;
 
 public abstract class Tower : GameTileContent {
     const int enemyLayerMask = 1 << 9;
+
     static Collider[] targetsBuffer = new Collider[100];
 
     [SerializeField, Range(1.5f, 10.5f)]
     protected float targetingRange = 1.5f;
-   
+
+    public abstract TowerType TowerType { get; }
 
     protected bool AcquireTarget(out TargetPoint target) {
         Vector3 a = transform.localPosition;

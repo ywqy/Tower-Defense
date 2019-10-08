@@ -14,6 +14,8 @@ public class LaserTower : Tower
 
     Vector3 laserBeamScale;
 
+    public override TowerType TowerType => TowerType.Laser;
+
     void Awake() {
         laserBeamScale = laserBeam.localScale;
     }

@@ -3,46 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Tower : GameTileContent {
+public abstract class Tower : GameTileContent {
     const int enemyLayerMask = 1 << 9;
     static Collider[] targetsBuffer = new Collider[100];
 
     [SerializeField, Range(1.5f, 10.5f)]
-    float targetingRange = 1.5f;
-    [SerializeField]
-    Transform turrent = default, laserBeam = default;
-    [SerializeField, Range(1f, 100f)]
-    float damagePerSecond = 10f;
+    protected float targetingRange = 1.5f;
+   
 
-    TargetPoint target;
-    Vector3 laserBeamScale;
-
-    public override void GameUpdate() {
-        if (TrackTarget() || AcquireTarget()) {
-            Shoot();
-        } else {
-            laserBeam.localScale = Vector3.zero;
-        }
-    }
-
-    void Awake() {
-        laserBeamScale = laserBeam.localScale;
-    }
-
-    void Shoot() {
-        Vector3 point = target.Position;
-        turrent.LookAt(point);
-        laserBeam.localRotation = turrent.localRotation;
-
-        float d = Vector3.Distance(turrent.position, point);
-        laserBeamScale.z = d;
-        laserBeam.localScale = laserBeamScale;
-        laserBeam.localPosition = turrent.localPosition + 0.5f * d * laserBeam.forward;
-
-        target.Enemy.ApplyDamage(damagePerSecond * Time.deltaTime);
-    }
-
-    bool AcquireTarget() {
+    protected bool AcquireTarget(out TargetPoint target) {
         Vector3 a = transform.localPosition;
         Vector3 b = a;
         b.y += 3f;
@@ -59,7 +28,7 @@ public class Tower : GameTileContent {
         return false;
     }
 
-    bool TrackTarget() {
+    protected bool TrackTarget(ref TargetPoint target) {
         if (target == null) {
             return false;
         }
@@ -81,8 +50,5 @@ public class Tower : GameTileContent {
         Vector3 position = transform.localPosition;
         position.y += 0.01f;
         Gizmos.DrawWireSphere(position, targetingRange);
-        if (target != null) {
-            Gizmos.DrawLine(position, target.Position);
-        }
     }
 }
